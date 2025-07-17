@@ -4,5 +4,7 @@ public interface IBaseServiceManager
 {
     IWorkspaceService WorkspaceService { get; }
 
+    IProjectService ProjectService { get; }
+
     IAuthenticationService AuthenticationService { get; }
 }

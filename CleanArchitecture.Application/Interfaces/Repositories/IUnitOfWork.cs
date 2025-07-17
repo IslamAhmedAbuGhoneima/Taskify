@@ -3,6 +3,7 @@
 public interface IUnitOfWork
 {
     IWorkspaceRepository WorkspaceRepo { get; }
+    IProjectRepository ProjectRepo { get; }
 
     Task<int> SaveAsync();
 }

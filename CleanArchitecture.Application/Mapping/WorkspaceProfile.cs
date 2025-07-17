@@ -13,5 +13,7 @@ public class WorkspaceProfile : Profile
         CreateMap<WorkspacesForCreationDto, Workspace>()
             .ForMember(d => d.CreatedAt, 
             opt => opt.MapFrom(src => DateTime.UtcNow));
+
+        CreateMap<WorkspacesForUpdateDto, Workspace>();
     }
 }

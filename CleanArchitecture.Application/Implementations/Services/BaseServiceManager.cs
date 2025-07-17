@@ -11,8 +11,9 @@ namespace CleanArchitecture.Application.Implementations.Services;
 
 public class BaseServiceManager : IBaseServiceManager
 {
-    IWorkspaceService _workspaceService;
-    IAuthenticationService _authenticationService;
+    readonly IWorkspaceService _workspaceService;
+    readonly IAuthenticationService _authenticationService;
+    readonly IProjectService _projectService;
 
     public BaseServiceManager(IUnitOfWork unitOfWork, 
         UserManager<User> userManager,
@@ -22,10 +23,13 @@ public class BaseServiceManager : IBaseServiceManager
     {
         _workspaceService = new WorkspaceService(unitOfWork,contextAccessor, mapper);
         _authenticationService = new AuthenticationService(userManager, jwtConfiguration, mapper);
+        _projectService = new ProjectService(unitOfWork, mapper);
 
     }
 
     public IWorkspaceService WorkspaceService => _workspaceService;
 
     public IAuthenticationService AuthenticationService => _authenticationService;
+
+    public IProjectService ProjectService => _projectService;
 }

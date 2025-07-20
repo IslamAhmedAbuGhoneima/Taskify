@@ -4,6 +4,8 @@ public interface IUnitOfWork
 {
     IWorkspaceRepository WorkspaceRepo { get; }
     IProjectRepository ProjectRepo { get; }
+    ITaskRepository TaskRepo { get; }
+
 
     Task<int> SaveAsync();
 }

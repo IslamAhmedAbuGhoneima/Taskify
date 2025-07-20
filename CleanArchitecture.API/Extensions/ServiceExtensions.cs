@@ -8,10 +8,10 @@ using CleanArchitecture.Infrastructure.Data;
 using CleanArchitecture.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using CleanArchitecture.Infrastructure.Data.Interceptors;
 
 namespace CleanArchitecture.API.Extensions;
 
@@ -24,7 +24,9 @@ public static class ServiceExtensions
         => services.AddScoped<IBaseServiceManager, BaseServiceManager>();
 
     public static void AddDbContext(this IServiceCollection services, IConfiguration config)
-        => services.AddDbContext<TaskifyDbContext>(opts => opts.UseSqlServer(config.GetConnectionString("TaskifyConnection")));
+        => services.AddDbContext<TaskifyDbContext>(opts =>
+        opts.UseSqlServer(config.GetConnectionString("TaskifyConnection"))
+        .AddInterceptors(new OnUpdateInterceptor()));
 
     public static void AddAutoMapper(this IServiceCollection services)
         => services.AddAutoMapper(cfg => cfg.AddMaps(typeof(WorkspaceProfile).Assembly));
@@ -34,7 +36,7 @@ public static class ServiceExtensions
         => services.AddIdentity<User, IdentityRole>(opts =>
         {
             opts.User.RequireUniqueEmail = true;
-
+            opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ ";
             opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
 
             opts.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultProvider;

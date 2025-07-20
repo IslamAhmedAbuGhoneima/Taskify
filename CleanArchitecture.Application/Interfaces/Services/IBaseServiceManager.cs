@@ -7,4 +7,6 @@ public interface IBaseServiceManager
     IProjectService ProjectService { get; }
 
     IAuthenticationService AuthenticationService { get; }
+
+    ITaskService TaskService { get; }
 }

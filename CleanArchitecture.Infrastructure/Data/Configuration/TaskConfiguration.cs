@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Reflection.Emit;
+using TaskEntity = CleanArchitecture.Domain.Models.Task;
+
 
 namespace CleanArchitecture.Infrastructure.Data.Configuration;
 
-public class TaskConfiguration : IEntityTypeConfiguration<Domain.Models.Task>
+public class TaskConfiguration : IEntityTypeConfiguration<TaskEntity>
 {
-    public void Configure(EntityTypeBuilder<Domain.Models.Task> builder)
+    public void Configure(EntityTypeBuilder<TaskEntity> builder)
     {
         builder.Property(prop => prop.Title)
             .HasMaxLength(200);

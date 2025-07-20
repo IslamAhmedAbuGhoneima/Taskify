@@ -2,7 +2,6 @@
 using CleanArchitecture.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace CleanArchitecture.API.Controllers;
 
@@ -47,9 +46,9 @@ public class ProjectController(IBaseServiceManager serviceManager) : ControllerB
     /// </summary>
     /// <param name="id">The Id of Project to retrive</param>
     /// <returns>The matching peoject <see cref="ProjectDto"/> ,If Found</returns>
-    /// <resonse code="200">If project found</resonse>
-    /// <resonse code="404">If project not found</resonse>
-    /// <resonse code="500">If there is any internal server error</resonse>
+    /// <response code="200">If project found</response>
+    /// <response code="404">If project not found</response>
+    /// <response code="500">If there is any internal server error</response>
 
     [Authorize]
     [HttpGet("{id:guid}/project")]

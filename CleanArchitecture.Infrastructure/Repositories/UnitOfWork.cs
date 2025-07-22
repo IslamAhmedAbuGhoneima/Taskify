@@ -9,6 +9,7 @@ public class UnitOfWork : IUnitOfWork
     readonly IWorkspaceRepository _workspaceRepository;
     readonly IProjectRepository _projectRepository;
     readonly ITaskRepository _taskRepository;
+    readonly ICommentRepository _commentRepository;
 
     public UnitOfWork(TaskifyDbContext context)
     {
@@ -16,11 +17,13 @@ public class UnitOfWork : IUnitOfWork
         _workspaceRepository = new WorkspaceRepository(context);
         _projectRepository = new ProjectRepository(context);
         _taskRepository = new TaskRepository(context);
+        _commentRepository = new CommentRepository(context);
     }
 
     public IWorkspaceRepository WorkspaceRepo => _workspaceRepository;
     public IProjectRepository ProjectRepo => _projectRepository;
     public ITaskRepository TaskRepo => _taskRepository;
+    public ICommentRepository CommentRepo => _commentRepository;
 
     public async Task<int> SaveAsync()
         => await _context.SaveChangesAsync();

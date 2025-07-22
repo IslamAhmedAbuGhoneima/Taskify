@@ -9,4 +9,6 @@ public interface IBaseServiceManager
     IAuthenticationService AuthenticationService { get; }
 
     ITaskService TaskService { get; }
+
+    ICommentService CommentService { get; }
 }

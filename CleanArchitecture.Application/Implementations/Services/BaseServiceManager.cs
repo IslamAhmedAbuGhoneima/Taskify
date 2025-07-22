@@ -15,17 +15,19 @@ public class BaseServiceManager : IBaseServiceManager
     readonly IAuthenticationService _authenticationService;
     readonly IProjectService _projectService;
     readonly ITaskService _taskService;
+    readonly ICommentService _commentService;
 
-    public BaseServiceManager(IUnitOfWork unitOfWork, 
+    public BaseServiceManager(IUnitOfWork unitOfWork,
         UserManager<User> userManager,
         IHttpContextAccessor contextAccessor,
         IOptions<JwtConfiguration> jwtConfiguration,
         IMapper mapper)
     {
-        _workspaceService = new WorkspaceService(unitOfWork,contextAccessor, mapper);
+        _workspaceService = new WorkspaceService(unitOfWork, contextAccessor, mapper);
         _authenticationService = new AuthenticationService(userManager, jwtConfiguration, mapper);
         _projectService = new ProjectService(unitOfWork, mapper);
         _taskService = new TaskService(unitOfWork, mapper);
+        _commentService = new CommentService(unitOfWork, contextAccessor, mapper);
 
     }
 
@@ -36,4 +38,6 @@ public class BaseServiceManager : IBaseServiceManager
     public IProjectService ProjectService => _projectService;
 
     public ITaskService TaskService => _taskService;
+
+    public ICommentService CommentService => _commentService;
 }

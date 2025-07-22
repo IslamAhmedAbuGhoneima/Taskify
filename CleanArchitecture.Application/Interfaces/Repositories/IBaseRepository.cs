@@ -4,7 +4,7 @@ public interface IBaseRepository<T>
 {
     IEnumerable<T> GetAll();
 
-    T GetEntity(Guid Id);
+    T GetEntity(Guid id);
 
     Task AddAsync(T entity);
 

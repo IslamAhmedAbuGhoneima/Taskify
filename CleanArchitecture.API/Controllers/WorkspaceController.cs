@@ -37,7 +37,7 @@ public class WorkspaceController(IBaseServiceManager serviceManager) : Controlle
     /// Creates a new workspace and assigns the authenticated admin user as its owner.
     /// </summary>
     /// <param name="request">the workspace creation request <see cref="WorkspacesForCreationDto"/></param>
-    /// <returns>the newly  created workspace <see cref="WorkspaceDto"/></returns>
+    /// <returns>the newly created workspace <see cref="WorkspaceDto"/></returns>
     /// <response code="201">Returns the created workspace</response>
     /// <response code="400">If the request is invalid</response>
     /// <response code="401">If the user is not authenticated</response>

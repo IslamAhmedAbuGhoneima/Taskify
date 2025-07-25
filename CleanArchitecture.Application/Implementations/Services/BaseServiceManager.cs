@@ -16,6 +16,7 @@ public class BaseServiceManager : IBaseServiceManager
     readonly IProjectService _projectService;
     readonly ITaskService _taskService;
     readonly ICommentService _commentService;
+    readonly INotificationService _notificationService;
 
     public BaseServiceManager(IUnitOfWork unitOfWork,
         UserManager<User> userManager,
@@ -28,6 +29,7 @@ public class BaseServiceManager : IBaseServiceManager
         _projectService = new ProjectService(unitOfWork, mapper);
         _taskService = new TaskService(unitOfWork, mapper);
         _commentService = new CommentService(unitOfWork, contextAccessor, mapper);
+        _notificationService = new NotificationService(unitOfWork, mapper, contextAccessor);
 
     }
 
@@ -40,4 +42,6 @@ public class BaseServiceManager : IBaseServiceManager
     public ITaskService TaskService => _taskService;
 
     public ICommentService CommentService => _commentService;
+
+    public INotificationService NotificationService => _notificationService;
 }

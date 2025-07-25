@@ -11,4 +11,6 @@ public interface IBaseServiceManager
     ITaskService TaskService { get; }
 
     ICommentService CommentService { get; }
+
+    INotificationService NotificationService { get; }
 }

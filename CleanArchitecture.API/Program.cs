@@ -1,4 +1,5 @@
 using CleanArchitecture.API.Extensions;
+using Microsoft.Extensions.FileProviders;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -62,6 +63,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+app.AddStaticFiles(builder.Environment);
 
 app.UseAuthentication();
 app.UseAuthorization();

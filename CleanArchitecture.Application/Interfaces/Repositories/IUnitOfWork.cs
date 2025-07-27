@@ -12,5 +12,7 @@ public interface IUnitOfWork
 
     INotificationRepository NotificationRepo { get; }
 
+    IAttachmentRepository AttachmentRepo { get; }
+
     Task<int> SaveAsync();
 }

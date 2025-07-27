@@ -13,4 +13,6 @@ public interface IBaseServiceManager
     ICommentService CommentService { get; }
 
     INotificationService NotificationService { get; }
+
+    IAttachmentService AttachmentService { get; }
 }

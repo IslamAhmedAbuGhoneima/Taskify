@@ -3,6 +3,7 @@ using CleanArchitecture.Application.Interfaces.Repositories;
 using CleanArchitecture.Application.Interfaces.Services;
 using CleanArchitecture.Domain.ConfigurationModel;
 using CleanArchitecture.Domain.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -17,11 +18,13 @@ public class BaseServiceManager : IBaseServiceManager
     readonly ITaskService _taskService;
     readonly ICommentService _commentService;
     readonly INotificationService _notificationService;
+    readonly IAttachmentService _attachmentService;
 
     public BaseServiceManager(IUnitOfWork unitOfWork,
         UserManager<User> userManager,
         IHttpContextAccessor contextAccessor,
         IOptions<JwtConfiguration> jwtConfiguration,
+        IWebHostEnvironment webHostEnvironment,
         IMapper mapper)
     {
         _workspaceService = new WorkspaceService(unitOfWork, contextAccessor, mapper);
@@ -30,6 +33,7 @@ public class BaseServiceManager : IBaseServiceManager
         _taskService = new TaskService(unitOfWork, mapper);
         _commentService = new CommentService(unitOfWork, contextAccessor, mapper);
         _notificationService = new NotificationService(unitOfWork, mapper, contextAccessor);
+        _attachmentService = new AttachmentService(unitOfWork, contextAccessor, webHostEnvironment, mapper);
 
     }
 
@@ -44,4 +48,6 @@ public class BaseServiceManager : IBaseServiceManager
     public ICommentService CommentService => _commentService;
 
     public INotificationService NotificationService => _notificationService;
+
+    public IAttachmentService AttachmentService => _attachmentService;
 }

@@ -12,6 +12,8 @@ public class UnitOfWork : IUnitOfWork
     readonly ICommentRepository _commentRepository;
     readonly INotificationRepository _notificationRepository;
     readonly IAttachmentRepository _attachmentRepository;
+    readonly ILabelRepository _labelRepository;
+    readonly ITaskLabelRepository _taskLabelRepository;
 
     public UnitOfWork(TaskifyDbContext context)
     {
@@ -22,6 +24,8 @@ public class UnitOfWork : IUnitOfWork
         _commentRepository = new CommentRepository(context);
         _notificationRepository = new NotificationRepository(context);
         _attachmentRepository = new AttachmentRepository(context);
+        _labelRepository = new LabelRepository(context);
+        _taskLabelRepository = new TaskLabelRepository(context);
     }
 
     public IWorkspaceRepository WorkspaceRepo => _workspaceRepository;
@@ -35,6 +39,10 @@ public class UnitOfWork : IUnitOfWork
     public INotificationRepository NotificationRepo => _notificationRepository;
 
     public IAttachmentRepository AttachmentRepo => _attachmentRepository;
+
+    public ILabelRepository LableRepo => _labelRepository;
+
+    public ITaskLabelRepository TaskLabelRepo => _taskLabelRepository;
 
     public async Task<int> SaveAsync()
         => await _context.SaveChangesAsync();

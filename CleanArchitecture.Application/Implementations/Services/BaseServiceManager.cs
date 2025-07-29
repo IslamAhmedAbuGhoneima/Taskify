@@ -19,6 +19,9 @@ public class BaseServiceManager : IBaseServiceManager
     readonly ICommentService _commentService;
     readonly INotificationService _notificationService;
     readonly IAttachmentService _attachmentService;
+    readonly ILabelService _labelService;
+    readonly ITaskLabelService _taskLabelService;
+
 
     public BaseServiceManager(IUnitOfWork unitOfWork,
         UserManager<User> userManager,
@@ -34,6 +37,8 @@ public class BaseServiceManager : IBaseServiceManager
         _commentService = new CommentService(unitOfWork, contextAccessor, mapper);
         _notificationService = new NotificationService(unitOfWork, mapper, contextAccessor);
         _attachmentService = new AttachmentService(unitOfWork, contextAccessor, webHostEnvironment, mapper);
+        _labelService = new LabelService(unitOfWork, mapper);
+        _taskLabelService = new TaskLabelService(unitOfWork, mapper);
 
     }
 
@@ -50,4 +55,8 @@ public class BaseServiceManager : IBaseServiceManager
     public INotificationService NotificationService => _notificationService;
 
     public IAttachmentService AttachmentService => _attachmentService;
+
+    public ILabelService ILableService => _labelService;
+
+    public ITaskLabelService TaskLabelService => _taskLabelService;
 }

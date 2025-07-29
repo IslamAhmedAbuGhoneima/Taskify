@@ -14,5 +14,9 @@ public interface IUnitOfWork
 
     IAttachmentRepository AttachmentRepo { get; }
 
+    ILabelRepository LableRepo { get; }
+
+    ITaskLabelRepository TaskLabelRepo { get; }
+
     Task<int> SaveAsync();
 }

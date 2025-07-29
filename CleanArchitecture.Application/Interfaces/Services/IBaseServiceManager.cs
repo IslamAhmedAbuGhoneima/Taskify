@@ -15,4 +15,8 @@ public interface IBaseServiceManager
     INotificationService NotificationService { get; }
 
     IAttachmentService AttachmentService { get; }
+
+    ILabelService ILableService { get; }
+
+    ITaskLabelService TaskLabelService { get; }
 }

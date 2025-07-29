@@ -1,5 +1,4 @@
 using CleanArchitecture.API.Extensions;
-using Microsoft.Extensions.FileProviders;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);

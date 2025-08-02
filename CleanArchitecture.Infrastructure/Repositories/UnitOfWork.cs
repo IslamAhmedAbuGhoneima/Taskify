@@ -14,6 +14,8 @@ public class UnitOfWork : IUnitOfWork
     readonly IAttachmentRepository _attachmentRepository;
     readonly ILabelRepository _labelRepository;
     readonly ITaskLabelRepository _taskLabelRepository;
+    readonly IUserWorkspaceRepository _userWorkspaceRepository;
+
 
     public UnitOfWork(TaskifyDbContext context)
     {
@@ -26,6 +28,7 @@ public class UnitOfWork : IUnitOfWork
         _attachmentRepository = new AttachmentRepository(context);
         _labelRepository = new LabelRepository(context);
         _taskLabelRepository = new TaskLabelRepository(context);
+        _userWorkspaceRepository = new UserWorkspaceRepository(context);
     }
 
     public IWorkspaceRepository WorkspaceRepo => _workspaceRepository;
@@ -43,6 +46,8 @@ public class UnitOfWork : IUnitOfWork
     public ILabelRepository LableRepo => _labelRepository;
 
     public ITaskLabelRepository TaskLabelRepo => _taskLabelRepository;
+
+    public IUserWorkspaceRepository UserWorkspaceRepo => _userWorkspaceRepository;
 
     public async Task<int> SaveAsync()
         => await _context.SaveChangesAsync();

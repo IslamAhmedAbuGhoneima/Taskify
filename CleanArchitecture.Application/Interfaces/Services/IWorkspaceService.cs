@@ -10,6 +10,12 @@ public interface IWorkspaceService
 
     WorkspaceDto GetWorkspace(Guid id);
 
+    IEnumerable<WorkspaceMemberDto> WorkspaceMembers(Guid workspaceId);
+
+    Task<UserWorkspaceDto> AddToWorkspace(WorkspaceMemberForCreationDto request);
+
+    Task<bool> ConvertUserWorkspaceRoleToAdmin(Guid workspaceId, string userId);
+
     Task<bool> UpdateWorkspace(Guid id, WorkspacesForUpdateDto request);
 
     Task<bool> DeleteWorkspace(Guid id);

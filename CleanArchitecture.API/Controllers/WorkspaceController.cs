@@ -1,7 +1,9 @@
-﻿using CleanArchitecture.Application.DTOs.WorkspaceDtos;
+﻿using Azure.Core;
+using CleanArchitecture.Application.DTOs.WorkspaceDtos;
 using CleanArchitecture.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace CleanArchitecture.API.Controllers;
 
@@ -100,11 +102,11 @@ public class WorkspaceController(IBaseServiceManager serviceManager) : Controlle
     /// <summary>
     /// Update workspace created by admin
     /// </summary>
-    /// <param name="id">The Id of workspace you want to update</param> // 
+    /// <param name="id">The Id of workspace you want to update</param> 
     /// <param name="request">The request body <see cref="WorkspacesForUpdateDto"/></param>
-    /// <response code="204">The workspace updated successfully</response> // 
-    /// <response code="400">If the request is invalid</response> // 
-    /// <response code="404">The workspace not found</response> // 
+    /// <response code="204">The workspace updated successfully</response> 
+    /// <response code="400">If the request is invalid</response> 
+    /// <response code="404">The workspace not found</response> 
     /// <response code="500">If there is any internal server error</response> 
 
     [Authorize(Roles = "admin")]
@@ -155,6 +157,94 @@ public class WorkspaceController(IBaseServiceManager serviceManager) : Controlle
             return NoContent();
         }
         catch(Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Get members added to workspace
+    /// </summary>
+    /// <param name="workspaceId">Id of workspace you want to get its members</param>
+    /// <returns>List of Members belong to this workspace <see cref="IEnumerable{WorkspaceMemberDto}"/></returns>
+    /// <response code="200">Returns the workspace members</response>
+    /// <response code="500">If there is any internal server error</response> 
+
+    [HttpGet("{workspaceId:guid}/members")]
+    public IActionResult GetWorkspaceMembers(Guid workspaceId)
+    {
+        try
+        {
+            var workspaceMembers = serviceManager.WorkspaceService.WorkspaceMembers(workspaceId);
+
+            return Ok(workspaceMembers);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Add user to workspace
+    /// </summary>
+    /// <param name="request">The request object for add user to workspace</param>
+    /// <returns>the newly created workspace <see cref="UserWorkspaceDto"/></returns>
+    /// <response code="200">Returns the created user workspace</response>
+    /// <response code="400">If the request is invalid</response>
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user is not an admin</response>
+    /// <response code="500">If there is any internal server error</response> 
+
+    [HttpPost("add-to-workspace")]
+    [Authorize(Roles ="admin")]
+    public async Task<IActionResult> AddUserToWorkspace(WorkspaceMemberForCreationDto request)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var workspaceUser = await serviceManager.WorkspaceService.AddToWorkspace(request);
+
+            return Ok(workspaceUser);
+        }
+        catch(BadHttpRequestException badRequest)
+        {
+            return BadRequest(badRequest.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        }
+    }
+
+
+
+    /// <summary>
+    /// Change user role in workspace to admin
+    /// </summary>
+    /// <param name="workspaceId">Id of workspace you want to change its user to admin</param>
+    /// <param name="userId">Id of user you want to change it to admin</param>
+    /// <response code="204">If the user role changed correctly</response>
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user is not an admin</response>
+    /// <response code="500">If there is any internal server error</response> 
+
+    [HttpPut("{workspaceId:guid}/change-to-admin/{userId}")]
+    [Authorize(Roles ="admin")]
+    public async Task<IActionResult> ChangetRoleToAdmin(Guid workspaceId,string userId)
+    {
+        try
+        {
+            var changed = await serviceManager.WorkspaceService.ConvertUserWorkspaceRoleToAdmin(workspaceId, userId);
+            
+            if (!changed)
+                return NotFound();
+
+            return NoContent();
+        }
+        catch (Exception ex)
         {
             return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
         }

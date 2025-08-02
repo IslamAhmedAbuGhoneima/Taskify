@@ -30,7 +30,7 @@ public class BaseServiceManager : IBaseServiceManager
         IWebHostEnvironment webHostEnvironment,
         IMapper mapper)
     {
-        _workspaceService = new WorkspaceService(unitOfWork, contextAccessor, mapper);
+        _workspaceService = new WorkspaceService(unitOfWork,contextAccessor, mapper);
         _authenticationService = new AuthenticationService(userManager, jwtConfiguration, mapper);
         _projectService = new ProjectService(unitOfWork, mapper);
         _taskService = new TaskService(unitOfWork, mapper);

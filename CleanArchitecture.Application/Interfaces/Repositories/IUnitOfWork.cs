@@ -18,5 +18,7 @@ public interface IUnitOfWork
 
     ITaskLabelRepository TaskLabelRepo { get; }
 
+    IUserWorkspaceRepository UserWorkspaceRepo { get; }
+
     Task<int> SaveAsync();
 }

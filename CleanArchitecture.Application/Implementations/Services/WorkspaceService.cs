@@ -19,13 +19,44 @@ public class WorkspaceService : IWorkspaceService
         IHttpContextAccessor httpContext, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
-        _mapper = mapper;
         _httpContext = httpContext;
+        _mapper = mapper;
+    }
+
+    public async Task<UserWorkspaceDto> AddToWorkspace(WorkspaceMemberForCreationDto request)
+    {
+        var userWorkspace = _mapper.Map<UserWorkspace>(request);
+
+        var userWorkspaceExists = 
+            _unitOfWork.UserWorkspaceRepo.GetUserWorkspace(userWorkspace.WorkspaceId, userWorkspace.UserId) != null;
+
+        if (userWorkspaceExists)
+            throw new BadHttpRequestException("This user alredy added to this workspace"); 
+
+        await _unitOfWork.UserWorkspaceRepo.AddAsync(userWorkspace);
+
+        await _unitOfWork.SaveAsync();
+
+        var userWorkspaceDto =
+            _unitOfWork.UserWorkspaceRepo.GetUserWorkspace(userWorkspace.WorkspaceId, userWorkspace.UserId);
+
+        return _mapper.Map<UserWorkspaceDto>(userWorkspaceDto);
+    }
+
+    public async Task<bool> ConvertUserWorkspaceRoleToAdmin(Guid workspaceId, string userId)
+    {
+        var userWorkspace = _unitOfWork.UserWorkspaceRepo.GetUserWorkspace(workspaceId, userId);
+
+        if (userWorkspace == null)
+            return false;
+
+        userWorkspace.Role = "Admin";
+        return await _unitOfWork.SaveAsync()>0;
     }
 
     public async Task<WorkspaceDto> CreateWorkspace(WorkspacesForCreationDto request)
     {
-        var userId = _httpContext.HttpContext.User.FindFirstValue("id");
+        var userId = _httpContext.HttpContext?.User.FindFirstValue("id");
 
         if (string.IsNullOrEmpty(userId)) 
             throw new UnauthorizedAccessException("User ID not found in context");
@@ -44,7 +75,7 @@ public class WorkspaceService : IWorkspaceService
 
     public async Task<bool> DeleteWorkspace(Guid id)
     {
-        var userId = _httpContext.HttpContext.User.FindFirstValue("id");
+        var userId = _httpContext.HttpContext?.User.FindFirstValue("id");
 
         if (string.IsNullOrEmpty(userId))
             throw new UnauthorizedAccessException("Unable to delete workspace");
@@ -82,7 +113,7 @@ public class WorkspaceService : IWorkspaceService
 
     public async Task<bool> UpdateWorkspace(Guid id, WorkspacesForUpdateDto request)
     {
-        var userId = _httpContext.HttpContext.User.FindFirstValue("id");
+        var userId = _httpContext.HttpContext?.User.FindFirstValue("id");
 
         if (string.IsNullOrEmpty(userId))
             throw new UnauthorizedAccessException("Unable to update workspace");
@@ -99,5 +130,14 @@ public class WorkspaceService : IWorkspaceService
 
         _unitOfWork.WorkspaceRepo.Update(workspace);
         return await _unitOfWork.SaveAsync() > 0;
+    }
+
+    public IEnumerable<WorkspaceMemberDto> WorkspaceMembers(Guid workspaceId)
+    {
+        var workspaceMembers = _unitOfWork.UserWorkspaceRepo.GetWorkspaceMembers(workspaceId);
+
+        var workspaceMembersDto = _mapper.Map<IEnumerable<WorkspaceMemberDto>>(workspaceMembers);
+
+        return workspaceMembersDto;
     }
 }

@@ -12,7 +12,7 @@ namespace CleanArchitecture.Test.UnitTest;
 
 [TestFixture]
 [Category("Workspace")]
-public class WorkspaceServiceTest
+public class WorkspaceControllerTest
 {
     private Mock<IWorkspaceService> _mockWorkspaceService;
     private Mock<IBaseServiceManager> _mockServiceManager;
